@@ -67,41 +67,34 @@ def customer_import(request):
     :param request:
     :return:
     """
-
-    # if request.method == 'GET':
-    #     return render(request, 'customer_import.html')
-    #
-    # context = {'status': True, 'msg': '导入成功'}
-    # try:
-    #     customer_excel = request.FILES.get('customer_excel')
-    #     """
-    #     打开上传的Excel文件，并读取内容
-    #     注：打开本地文件时，可以使用：workbook = xlrd.open_workbook(filename='本地文件路径.xlsx')
-    #     """
-    #     workbook = xlrd.open_workbook(file_contents=customer_excel.file.read())
-    #
-    #     # sheet = workbook.sheet_by_name('工作表1')
-    #     sheet = workbook.sheet_by_index(0)
-    #     row_map = {
-    #         0: {'text': '客户姓名', 'name': 'name'},
-    #         1: {'text': '年龄', 'name': 'age'},
-    #         2: {'text': '邮箱', 'name': 'email'},
-    #         3: {'text': '公司', 'name': 'company'},
-    #     }
-    #     customers = []
-    #     for row_num in range(1, sheet.nrows):
-    #         row = sheet.row(row_num)
-    #         row_dict = {}
-    #         for col_num, text_name in row_map.items():
-    #             row_dict[text_name['name']] = row[col_num].value
-    #         customers.append(models.Customer(**row_dict))
-    #
-    #     models.Customer.objects.bulk_create(customers, batch_size=20)
-    # except Exception as e:
-    #     context['status'] = False
-    #     context['msg'] = '导入失败'
-    #
-    # return render(request, 'customer_import.html', context)
+    if request.method == "GET":
+        return render(request, "customer_import.html")
+    context = {"status": True, "msg": "success"}
+    try:
+        # 获取文件
+        import_file = request.FILES.get("customer_excel")
+        # 打开excel文件
+        work_book = xlrd.open_workbook(file_contents=import_file.file.read())
+        row_map = {
+            0: {"text": "客户姓名", "name": "name"},
+            1: {"text": "年龄", "name": "age"},
+            2: {"text": "邮箱", "name": "email"},
+            3: {"text": "公司", "name": "company"},
+        }
+        customers = []
+        import_sheet = work_book.sheet_by_index(0)
+        for row_num in range(0, import_sheet.nrows):
+            row = import_sheet.row(row_num)
+            customer_dict = {}
+            for col_num, text_name in row_map.items():
+                customer_dict[text_name["name"]] = row[col_num].value
+            customer = models.Customer(**customer_dict)
+            customers.append(customer)
+        models.Customer.objects.bulk_create(customers)
+    except Exception:
+        context["status"] = False
+        context["msg"] = "failed"
+    return render(request, "customer_import.html")
 
 
 def customer_tpl(request):
