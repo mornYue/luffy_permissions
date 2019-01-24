@@ -1,4 +1,9 @@
+import mimetypes
+import os
+
 import xlrd
+from django.conf import settings
+from django.http import FileResponse
 from django.shortcuts import render, redirect
 
 from web import models
@@ -98,4 +103,14 @@ def customer_import(request):
 
 
 def customer_tpl(request):
-    pass
+    """
+    下载批量导入Excel列表
+    :param request:
+    :return:
+    """
+    tpl_path = os.path.join(settings.BASE_DIR, 'web', 'files', '批量导入客户模板.xlsx')
+    content_type = mimetypes.guess_type(tpl_path)[0]
+    print(content_type)
+    response = FileResponse(open(tpl_path, mode='rb'), content_type=content_type)
+    response['Content-Disposition'] = "attachment;filename=%s" % 'customer_excel_tpl.xlsx'
+    return response

@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from web import models
+from web.custom_forms.bill_form import BillForm
 
 
 def bill_list(request):
@@ -9,12 +10,28 @@ def bill_list(request):
 
 
 def bill_add(request):
-    pass
+    if request.method == "GET":
+        form = BillForm()
+        return render(request, "bill_add.html", {"form": form})
+    form = BillForm(data=request.POST)
+    if form.is_valid():
+        form.save()
+        return redirect("/customer/list")
+    return render(request, "bill_add.html", {"form": form})
 
 
 def bill_edit(request, bid):
-    pass
+    bill = models.Bill.objects.filter(pk=bid)
+    if request.method == "GET":
+        form = BillForm(instance=bill)
+        return render(request, "bill_edit.html", {"form": form})
+    form = BillForm(data=request.POST, instance=bill)
+    if form.is_valid():
+        form.save()
+        return redirect("/customer/list")
+    return render(request, "bill_edit.html", {"form": form})
 
 
 def bill_del(request, bid):
-    pass
+    models.Bill.objects.filter(pk=bid).delete()
+    return redirect("/bill/list")
