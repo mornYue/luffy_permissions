@@ -1,7 +1,10 @@
 from django.urls import re_path
-from web.views import customer, bill
+from web.views import customer, bill, account
 
 urlpatterns = [
+    re_path(r'^login/$', account.login),
+    re_path(r'^logout/$', account.logout),
+
     re_path(r'^customer/list/$', customer.customer_list),
     re_path(r'^customer/add/$', customer.customer_add),
     re_path(r'^customer/edit/(?P<cid>\d+)/$', customer.customer_edit),

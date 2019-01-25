@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'rbac.custom_middleware.permission_middleware.PermissionMiddleware',
 ]
 
 ROOT_URLCONF = 'luffy_permissions.urls'
@@ -126,4 +127,21 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "web/static")
+]
+
+
+# 用户权限在session中的key
+USER_PERMISSIONS_KEY = "user_permissions_key"
+
+# 菜单列表在session的key
+USER_MENU_KEY = "user_menu_key"
+
+
+# 权限白名单
+WHITE_LIST = [
+    "/index/",
+    "/login/",
+    "/logout/",
+    "/admin/.*",
+    "/favicon.ico",
 ]

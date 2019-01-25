@@ -18,7 +18,7 @@ def customer_list(request):
     """
     customers = models.Customer.objects.all()
 
-    return render(request, 'customer_list.html', {'customers': customers})
+    return render(request, 'customer_list.html', locals())
 
 
 def customer_add(request):
@@ -29,12 +29,12 @@ def customer_add(request):
     """
     if request.method == "GET":
         form = CustomerForm()
-        return render(request, "customer_add.html", {"form": form})
+        return render(request, "customer_add.html", locals())
     form = CustomerForm(data=request.POST)
     if form.is_valid():
         form.save()
         return redirect("/customer/list")
-    return render(request, "customer_add.html", {"form": form})
+    return render(request, "customer_add.html", locals())
 
 
 def customer_edit(request, cid):
@@ -44,15 +44,15 @@ def customer_edit(request, cid):
     :param cid: 客户id
     :return:
     """
-    customer = models.Customer.objects.filter(pk=cid)
+    customer = models.Customer.objects.filter(pk=cid).get()
     if request.method == "GET":
         form = CustomerForm(instance=customer)
-        return render(request, "customer_edit.html", {"form": form})
+        return render(request, "customer_edit.html", locals())
     form = CustomerForm(data=request.POST, instance=customer)
     if form.is_valid():
         form.save()
         return redirect("/customer/list")
-    return render(request, "customer_edit.html", {"form": form})
+    return render(request, "customer_edit.html", locals())
 
 
 def customer_del(request, cid):
@@ -112,5 +112,6 @@ def customer_tpl(request):
     content_type = mimetypes.guess_type(tpl_path)[0]
     print(content_type)
     response = FileResponse(open(tpl_path, mode='rb'), content_type=content_type)
+    
     response['Content-Disposition'] = "attachment;filename=%s" % 'customer_excel_tpl.xlsx'
     return response

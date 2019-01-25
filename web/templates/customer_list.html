@@ -23,18 +23,18 @@
             </tr>
             </thead>
             <tbody>
-            {% for row in data_list %}
+            {% for customer in customers %}
                 <tr>
-                    <td>{{ row.id }}</td>
-                    <td>{{ row.name }}</td>
-                    <td>{{ row.age }}</td>
-                    <td>{{ row.email }}</td>
-                    <td>{{ row.company }}</td>
+                    <td>{{ customer.id }}</td>
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.age }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>{{ customer.company }}</td>
                     <td>
-                        <a style="color: #333333;" href="/customer/edit/{{ row.id }}/">
+                        <a style="color: #333333;" href="/customer/edit/{{ customer.id }}/">
                             <i class="fa fa-edit" aria-hidden="true"></i></a>
                         |
-                        <a style="color: #d9534f;" href="/customer/del/{{ row.id }}/"><i class="fa fa-trash-o"></i></a>
+                        <a style="color: #d9534f;" href="/customer/del/{{ customer.id }}/"><i class="fa fa-trash-o"></i></a>
                     </td>
 
                 </tr>

@@ -4,7 +4,7 @@
 
     <div class="luffy-container">
         <div style="margin: 5px 0;">
-            <a class="btn btn-success" href="/payment/add/">
+            <a class="btn btn-success" href="/bill/add/">
                 <i class="fa fa-plus-square" aria-hidden="true"></i> 添加缴费记录
             </a>
         </div>
@@ -13,23 +13,23 @@
             <tr>
                 <th>ID</th>
                 <th>客户姓名</th>
-                <th>金额</th>
-                <th>付费时间</th>
+                <th>交易金额</th>
+                <th>交易时间</th>
                 <th>选项</th>
             </tr>
             </thead>
             <tbody>
-            {% for row in data_list %}
+            {% for bill in bills %}
                 <tr>
-                    <td>{{ row.id }}</td>
-                    <td>{{ row.customer.name }}</td>
-                    <td>{{ row.money }}</td>
-                    <td>{{ row.create_time|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ bill.id }}</td>
+                    <td>{{ bill.customer.name }}</td>
+                    <td>{{ bill.money }}</td>
+                    <td>{{ bill.create_time|date:"Y-m-d H:i:s" }}</td>
                     <td>
-                        <a style="color: #333333;" href="/payment/edit/{{ row.id }}/">
+                        <a style="color: #333333;" href="/bill/edit/{{ bill.id }}/">
                             <i class="fa fa-edit" aria-hidden="true"></i></a>
                         |
-                        <a style="color: #d9534f;" href="/payment/del/{{ row.id }}/"><i class="fa fa-trash-o"></i></a>
+                        <a style="color: #d9534f;" href="/bill/del/{{ bill.id }}/"><i class="fa fa-trash-o"></i></a>
                     </td>
 
                 </tr>

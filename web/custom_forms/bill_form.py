@@ -18,7 +18,7 @@ class BillForm(ModelForm):
         super(ModelForm, self).__init__(*args, **kwargs)
 
         for name, value in self.fields.items():
-            value.widget.attr["class"] = "from-control"
-            value.widget.attr["placeholder"] = value.label
+            value.widget.attrs["class"] = "form-control"
+            value.widget.attrs["placeholder"] = value.label
 
 

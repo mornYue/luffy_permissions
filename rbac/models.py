@@ -34,6 +34,7 @@ class Permission(models.Model):
     """
     title = models.CharField(max_length=32, verbose_name="权限名称")
     url = models.CharField(max_length=128, verbose_name="访问地址", help_text="存放url的正则匹配的格式")
+    is_menu = models.BooleanField(verbose_name="菜单", help_text="使用布尔值来存放该url是否可以作为菜单")
 
     def __str__(self):
         return self.title

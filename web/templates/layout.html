@@ -155,10 +155,14 @@
     <div class="left-menu">
         <div class="menu-body">
             <div class="static-menu">
-                <a href="/customer/list/" class="active">
-                    <span class="icon-wrap"><i class="fa fa-connectdevelop"></i></span> 客户管理</a>
-                <a href="/bill/list/">
-                    <span class="icon-wrap"><i class="fa fa-code-fork"></i></span> 账单管理</a>
+                {% for menu in request.session.user_menu_key %}
+                    <a href="{{ menu.url }}"  {% if request.path_info == menu.url %}class="active"{% endif %}>
+                    <span class="icon-wrap">
+                        <i class="fa fa-user-circle-o"></i>
+                    </span>
+                    {{ menu.title }}
+                    </a>
+                {% endfor %}
             </div>
 
         </div>
