@@ -34,7 +34,24 @@ class Permission(models.Model):
     """
     title = models.CharField(max_length=32, verbose_name="权限名称")
     url = models.CharField(max_length=128, verbose_name="访问地址", help_text="存放url的正则匹配的格式")
-    is_menu = models.BooleanField(verbose_name="菜单", help_text="使用布尔值来存放该url是否可以作为菜单")
+    name = models.CharField(max_length=32, verbose_name="访问地址别名", unique=True)
+    # is_menu = models.BooleanField(verbose_name="菜单", help_text="使用布尔值来存放该url是否可以作为菜单")
+    menu = models.ForeignKey(to="Menu", verbose_name="所属菜单", on_delete=models.CASCADE,
+                             blank=True, null=True)
+    sub_menu = models.ForeignKey(to="self", related_name="parent", blank=True, null=True,
+                                 verbose_name="所属子菜单", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
+
+
+class Menu(models.Model):
+    """
+    菜单表
+    """
+    title = models.CharField(max_length=32, verbose_name="菜单名称")
+    icon = models.CharField(max_length=32, verbose_name="图标", null=True, blank=True)
+
+    def __str__(self):
+        return self.title
+

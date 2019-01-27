@@ -1,12 +1,14 @@
 {% extends 'layout.html' %}
-
+{% load rbac %}
 {% block content %}
 
     <div class="luffy-container">
         <div style="margin: 5px 0;">
-            <a class="btn btn-success" href="/bill/add/">
-                <i class="fa fa-plus-square" aria-hidden="true"></i> 添加缴费记录
-            </a>
+            {% if request|permission_display:"bill_add" %}
+                <a class="btn btn-success" href="/bill/add/">
+                    <i class="fa fa-plus-square" aria-hidden="true"></i> 添加缴费记录
+                </a>
+            {% endif %}
         </div>
         <table class="table table-bordered table-hover">
             <thead>
@@ -15,7 +17,9 @@
                 <th>客户姓名</th>
                 <th>交易金额</th>
                 <th>交易时间</th>
-                <th>选项</th>
+                {% if request|permission_display:"bill_edit" or request|permission_display:"bill_del" %}
+                    <th>选项</th>
+                {% endif %}
             </tr>
             </thead>
             <tbody>
@@ -25,13 +29,18 @@
                     <td>{{ bill.customer.name }}</td>
                     <td>{{ bill.money }}</td>
                     <td>{{ bill.create_time|date:"Y-m-d H:i:s" }}</td>
-                    <td>
-                        <a style="color: #333333;" href="/bill/edit/{{ bill.id }}/">
-                            <i class="fa fa-edit" aria-hidden="true"></i></a>
-                        |
-                        <a style="color: #d9534f;" href="/bill/del/{{ bill.id }}/"><i class="fa fa-trash-o"></i></a>
-                    </td>
-
+                    {% if request|permission_display:"bill_edit" or request|permission_display:"bill_del" %}
+                        <td>
+                            {% if request|permission_display:"bill_edit" %}
+                                <a style="color: #333333;" href="/bill/edit/{{ bill.id }}/">
+                                    <i class="fa fa-edit" aria-hidden="true"></i></a>
+                            {% endif %}
+                            {% if request|permission_display:"bill_del" %}
+                                |
+                                <a style="color: #d9534f;" href="/bill/del/{{ bill.id }}/"><i class="fa fa-trash-o"></i></a>
+                            {% endif %}
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>

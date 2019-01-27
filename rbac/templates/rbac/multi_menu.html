@@ -1,0 +1,18 @@
+<div class="multi-menu">
+    {% for menu in menus %}
+        <div class="item">
+            <div class="title">
+                <span class="icon-wrap">
+                    <i class="fa fa-2x {{ menu.icon }}"></i>
+                </span>
+                {{ menu.title }}
+            </div>
+            <div class="body {{ menu.class }}">
+                {% for per in menu.children %}
+                    <a class="{{ per.class }}" href="{{ per.url }}">{{ per.title }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+

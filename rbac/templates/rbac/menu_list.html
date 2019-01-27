@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block css %}
+    <style>
+        .col-md-3{
+            padding: 0;
+        }
+        .panel-heading a {
+            padding: 2px 8px;
+            margin: -3px;
+        }
+        tr.active {
+                border-left: 3px solid #fdc00f;
+        }
+    </style>
+{% endblock css %}
+{% block content %}
+    <div class="luffy-container">
+        <div class="col-md-3 panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading clearfix">
+                <i class="fa fa-book" aria-hidden="true"> 一级菜单</i>
+                <a href="{% url 'rbac:menu_add' %}" class="btn btn-success right">
+                    <i class="fa fa-plus-circle"> 新建</i>
+                </a>
+            </div>
+            <!-- Table -->
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>图标</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for menu in menus %}
+                    <tr {% if menu.id|safe == menu_id %}
+                            class="active"
+                        {% endif %}>
+                        <td>
+                            <a href="?mid={{ menu.id }}">{{ menu.title }}</a>
+                        </td>
+                        <td><i class="fa {{ menu.icon }}"></i></td>
+                        <td>
+                            <a style="color: #333333;" href="{% url 'rbac:menu_edit' mid=menu.id %}">
+                            <i class="fa fa-edit" aria-hidden="true"></i></a>
+
+
+                        <a style="color: #d9534f;" href="{% url 'rbac:menu_del' mid=menu.id  %}"><i
+                                class="fa fa-trash-o"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

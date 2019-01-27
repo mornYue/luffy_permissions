@@ -12,6 +12,9 @@ class Customer(models.Model):
     email = models.EmailField(verbose_name='邮箱', max_length=32)
     company = models.CharField(verbose_name='公司', max_length=32)
 
+    def __str__(self):
+        return self.name
+
 
 class Bill(models.Model):
     """

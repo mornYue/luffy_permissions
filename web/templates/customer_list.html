@@ -1,15 +1,19 @@
 {% extends 'layout.html' %}
-
+{% load rbac %}
 {% block content %}
 
     <div class="luffy-container">
         <div class="btn-group" style="margin: 5px 0">
-            <a class="btn btn-default" href="/customer/add/">
-                <i class="fa fa-plus-square" aria-hidden="true"></i> 添加客户
-            </a>
-            <a class="btn btn-default" href="/customer/import/">
-                <i class="fa fa-file-excel-o" aria-hidden="true"></i> 批量导入
-            </a>
+            {% if request|permission_display:"customer_add" %}
+                <a class="btn btn-default" href="/customer/add/">
+                    <i class="fa fa-plus-square" aria-hidden="true"></i> 添加客户
+                </a>
+            {% endif %}
+            {% if request|permission_display:"customer_import" %}
+                <a class="btn btn-default" href="/customer/import/">
+                    <i class="fa fa-file-excel-o" aria-hidden="true"></i> 批量导入
+                </a>
+            {% endif %}
         </div>
         <table class="table table-bordered table-hover">
             <thead>
@@ -19,7 +23,9 @@
                 <th>年龄</th>
                 <th>邮箱</th>
                 <th>公司</th>
-                <th>选项</th>
+                {% if request|permission_display:"customer_edit" or request|permission_display:"customer_del" %}
+                    <th>选项</th>
+                {% endif %}
             </tr>
             </thead>
             <tbody>
@@ -30,13 +36,18 @@
                     <td>{{ customer.age }}</td>
                     <td>{{ customer.email }}</td>
                     <td>{{ customer.company }}</td>
-                    <td>
-                        <a style="color: #333333;" href="/customer/edit/{{ customer.id }}/">
-                            <i class="fa fa-edit" aria-hidden="true"></i></a>
-                        |
-                        <a style="color: #d9534f;" href="/customer/del/{{ customer.id }}/"><i class="fa fa-trash-o"></i></a>
-                    </td>
-
+                    {% if request|permission_display:"customer_edit" or request|permission_display:"customer_del" %}
+                        <td>
+                            {% if request|permission_display:"customer_edit" %}
+                                <a style="color: #333333;" href="/customer/edit/{{ customer.id }}/">
+                                    <i class="fa fa-edit" aria-hidden="true"></i></a>
+                            {% endif %}
+                            {% if request|permission_display:"customer_del" %}
+                                |
+                                <a style="color: #d9534f;" href="/customer/del/{{ customer.id }}/"><i class="fa fa-trash-o"></i></a>
+                            {% endif %}
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>

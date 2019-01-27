@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'rbac.custom_middleware.permission_middleware.PermissionMiddleware',
+    # 'rbac.custom_middleware.permission_middleware.PermissionMiddleware',
 ]
 
 ROOT_URLCONF = 'luffy_permissions.urls'
@@ -126,7 +126,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "web/static")
+    os.path.join(BASE_DIR, "web/static"),
+    os.path.join(BASE_DIR, "rbac/static")
 ]
 
 
@@ -144,4 +145,5 @@ WHITE_LIST = [
     "/logout/",
     "/admin/.*",
     "/favicon.ico",
+    "/rbac/.*"
 ]
