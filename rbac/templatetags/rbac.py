@@ -6,6 +6,8 @@ from collections import OrderedDict
 from django.template import Library
 from django.conf import settings
 
+from rbac.utils.url_util import reverse_url_t
+
 register = Library()
 
 
@@ -63,3 +65,17 @@ def permission_display(request, name):
     menu_dict = request.session[settings.USER_PERMISSIONS_KEY]
     if name in menu_dict:
         return True
+
+
+@register.simple_tag
+def reverse_url(request, name, *args, **kwargs):
+    """
+    url反向解析并且保存选中信息
+    :param request:
+    :param name: url别名
+    :param args: 参数
+    :param kwargs: 参数
+    :return:
+    """
+    return reverse_url_t(request, name, *args, **kwargs)
+

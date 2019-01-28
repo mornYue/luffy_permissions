@@ -50,7 +50,7 @@ class Menu(models.Model):
     菜单表
     """
     title = models.CharField(max_length=32, verbose_name="菜单名称")
-    icon = models.CharField(max_length=32, verbose_name="图标", null=True, blank=True)
+    icon = models.CharField(max_length=32, verbose_name="图标")
 
     def __str__(self):
         return self.title

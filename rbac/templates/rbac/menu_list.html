@@ -1,58 +1,166 @@
 {% extends "layout.html" %}
+{% load rbac %}
 {% block css %}
     <style>
-        .col-md-3{
+        .col-md-3 {
             padding: 0;
         }
+
         .panel-heading a {
             padding: 2px 8px;
             margin: -3px;
         }
+
         tr.active {
-                border-left: 3px solid #fdc00f;
+            border-left: 3px solid #fdc00f;
         }
     </style>
 {% endblock css %}
 {% block content %}
     <div class="luffy-container">
-        <div class="col-md-3 panel panel-default">
-            <!-- Default panel contents -->
-            <div class="panel-heading clearfix">
-                <i class="fa fa-book" aria-hidden="true"> 一级菜单</i>
-                <a href="{% url 'rbac:menu_add' %}" class="btn btn-success right">
-                    <i class="fa fa-plus-circle"> 新建</i>
-                </a>
-            </div>
-            <!-- Table -->
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>名称</th>
-                    <th>图标</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for menu in menus %}
-                    <tr {% if menu.id|safe == menu_id %}
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading clearfix">
+                    <i class="fa fa-book" aria-hidden="true"> 一级菜单</i>
+                    <a href="{% reverse_url request 'rbac:menu_add' %}" class="btn btn-success right">
+                        <i class="fa fa-plus-circle"> 新建</i>
+                    </a>
+                </div>
+                <!-- Table -->
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>图标</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for menu in menus %}
+                        <tr {% if menu.id|safe == menu_id %}
                             class="active"
                         {% endif %}>
-                        <td>
-                            <a href="?mid={{ menu.id }}">{{ menu.title }}</a>
-                        </td>
-                        <td><i class="fa {{ menu.icon }}"></i></td>
-                        <td>
-                            <a style="color: #333333;" href="{% url 'rbac:menu_edit' mid=menu.id %}">
-                            <i class="fa fa-edit" aria-hidden="true"></i></a>
+                            <td>
+                                <a href="?mid={{ menu.id }}">{{ menu.title }}</a>
+                            </td>
+                            <td><i class="fa {{ menu.icon }}"></i></td>
+                            <td>
+                                <a style="color: #333333;"
+                                   href="{% reverse_url request 'rbac:menu_edit' mid=menu.id %}">
+                                    <i class="fa fa-edit" aria-hidden="true"></i></a>
 
 
-                        <a style="color: #d9534f;" href="{% url 'rbac:menu_del' mid=menu.id  %}"><i
-                                class="fa fa-trash-o"></i></a>
-                        </td>
+                                <a style="color: #d9534f;" href="{% reverse_url request 'rbac:menu_del' mid=menu.id %}"><i
+                                        class="fa fa-trash-o"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading clearfix">
+                    <i class="fa fa-book" aria-hidden="true"> 子菜单</i>
+                    {% if menu_id %}
+                            <a href="{% reverse_url request 'rbac:submenu_add' mid=menu_id %}" class="btn btn-success right">
+                                <i class="fa fa-plus-circle"> 新建</i>
+                            </a>
+                    {% endif %}
+                </div>
+                <!-- Table -->
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>name&url</th>
+                        <th>操作</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for submenu in submenus %}
+                        <tr {% if submenu.id|safe == submenu_id %}
+                            class="active"
+                        {% endif %}>
+                            <td rowspan="2">
+                                <a href="?mid={{ menu_id }}&sid={{ submenu.id }}">{{ submenu.title }}</a>
+                            </td>
+                            <td>
+                                {{ submenu.name }}
+                            </td>
+                            <td>
+                                <a style="color: #333333;"
+                                   href="{% reverse_url request 'rbac:submenu_edit' sid=submenu.id %}">
+                                    <i class="fa fa-edit" aria-hidden="true"></i></a>
+
+
+                                <a style="color: #d9534f;" href="{% reverse_url request 'rbac:submenu_del' sid=submenu.id %}"><i
+                                        class="fa fa-trash-o"></i></a>
+                            </td>
+                        </tr>
+                        <tr {% if submenu.id|safe == submenu_id %}
+                            class="active"
+                        {% endif %}>
+                            <td colspan="2" style="border-top: 0;">
+                                {{ submenu.url }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading clearfix">
+                    <i class="fa fa-book" aria-hidden="true"> 权限</i>
+                    {% if menu_id and submenu_id %}
+                            <a href="{% reverse_url request 'rbac:permission_add' sid=submenu_id %}" class="btn btn-success right">
+                                <i class="fa fa-plus-circle"> 新建</i>
+                            </a>
+                    {% endif %}
+                </div>
+                <!-- Table -->
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>name&url</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for permission in permissions %}
+                        <tr>
+                            <td rowspan="2">
+                                {{ permission.title }}
+                            </td>
+                            <td>
+                                {{ permission.name }}
+                            </td>
+                            <td>
+                                <a style="color: #333333;"
+                                   href="{% reverse_url request 'rbac:permission_edit' pid=permission.id %}">
+                                    <i class="fa fa-edit" aria-hidden="true"></i></a>
+
+
+                                <a style="color: #d9534f;" href="{% reverse_url request 'rbac:permission_del' pid=permission.id %}"><i
+                                        class="fa fa-trash-o"></i></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="border-top: 0;">
+                                {{ permission.url }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

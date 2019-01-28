@@ -17,4 +17,12 @@ urlpatterns = [
     re_path(r'^menu/add/$', menu.menu_add, name="menu_add"),
     re_path(r'^menu/edit/(?P<mid>\d+)', menu.menu_edit, name="menu_edit"),
     re_path(r'^menu/del/(?P<mid>\d+)', menu.menu_del, name="menu_del"),
+
+    re_path(r'^submenu/add/(?P<mid>\d+)', menu.submenu_add, name="submenu_add"),
+    re_path(r'^submenu/edit/(?P<sid>\d+)', menu.submenu_edit, name="submenu_edit"),
+    re_path(r'^submenu/del/(?P<sid>\d+)', menu.submenu_del, name="submenu_del"),
+
+    re_path(r'^permission/add/(?P<sid>\d+)', menu.permission_add, name="permission_add"),
+    re_path(r'^permission/edit/(?P<pid>\d+)', menu.permission_edit, name="permission_edit"),
+    re_path(r'^permission/del/(?P<pid>\d+)', menu.permission_del, name="permission_del"),
 ]
