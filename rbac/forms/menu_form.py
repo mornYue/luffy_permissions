@@ -3,6 +3,7 @@
 # Date:2019/1/28
 from django import forms
 from django.utils.safestring import mark_safe
+from django.db.models import Q
 
 from rbac import models
 from rbac.forms.base_form import BaseForm
@@ -75,5 +76,79 @@ class PermissionForm(BaseForm):
         fields = ['title', 'url', 'name']
 
 
+class BatchAddPermissionsForm(forms.Form):
+    title = forms.CharField(
+        widget=forms.TextInput(attrs={"class": "form-control"}))
+    url = forms.CharField(
+        widget=forms.TextInput(attrs={"class": "form-control"}))
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={"class": "form-control"}))
+    menu_id = forms.ChoiceField(
+        widget=forms.Select(attrs={"class": "form-control"}),
+        choices=[
+            (None, '------'),
+        ],
+        required=False
+    )
+    sub_menu_id = forms.ChoiceField(
+        widget=forms.Select(
+            attrs={"class": "form-control"}
+        ),
+        choices=[
+            (None, '------')
+        ],
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(BatchAddPermissionsForm, self).__init__(*args, **kwargs)
+        self.fields['menu_id'].choices += models.Menu.objects.values_list('id', 'title')
+        self.fields['sub_menu_id'].choices += models.Permission.objects.filter(
+            Q(menu__isnull=False) & Q(sub_menu__isnull=True)
+        ).values_list('id', 'title')
 
 
+class BatchUpdatePermissionsForm(forms.Form):
+    id = forms.IntegerField(
+        widget=forms.HiddenInput()
+    )
+
+    title = forms.CharField(
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}
+        )
+    )
+
+    url = forms.CharField(
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}
+        )
+    )
+
+    name = forms.CharField(
+        widget=forms.TextInput(
+            attrs={"class": "form-control"}
+        )
+    )
+
+    menu_id = forms.ChoiceField(
+        choices=[(None, "------")],
+        widget=forms.Select(
+            attrs={"class": "form-control"}
+        ),
+        required=False
+    )
+
+    sub_menu_id = forms.ChoiceField(
+        choices=[(None, '------')],
+        widget=forms.Select(
+            attrs={"class": "form-control"}
+        ),
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(BatchUpdatePermissionsForm, self).__init__(*args, **kwargs)
+        self.fields['menu_id'].choices += models.Menu.objects.values_list('id', 'title')
+        self.fields['sub_menu_id'].choices += models.Permission.objects.filter(
+            menu__isnull=False, sub_menu__isnull=True).values_list('id', 'title')

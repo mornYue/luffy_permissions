@@ -1,6 +1,7 @@
 from django.urls import re_path
 
 from rbac.views import role, user, menu
+from rbac.utils import url_util
 
 urlpatterns = [
     re_path(r'^role/list/$', role.role_list, name="role_list"),
@@ -25,4 +26,7 @@ urlpatterns = [
     re_path(r'^permission/add/(?P<sid>\d+)', menu.permission_add, name="permission_add"),
     re_path(r'^permission/edit/(?P<pid>\d+)', menu.permission_edit, name="permission_edit"),
     re_path(r'^permission/del/(?P<pid>\d+)', menu.permission_del, name="permission_del"),
+
+    re_path(r'^bulk/operate/', menu.bulk_operate, name="bulk_operate"),
+    re_path(r'^bulk/delete/(?P<pk>\d+)', menu.bulk_del, name="bulk_delete")
 ]

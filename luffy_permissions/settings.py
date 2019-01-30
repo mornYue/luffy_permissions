@@ -147,3 +147,10 @@ WHITE_LIST = [
     "/favicon.ico",
     "/rbac/.*"
 ]
+
+# 自动检索项目中所有url需要排除的url列表
+EXCLUDE_URLS_LIST = [
+    '/admin/.*',
+    '/login.*',
+    '/logout.*'
+]
